@@ -1,4 +1,4 @@
-#include "debug_new_and_delete.h"
+#include "debug_new_and_delete.hpp"
 
 #include <exception> // for std::bad_alloc
 #include <new>

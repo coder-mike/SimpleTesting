@@ -4,8 +4,8 @@
  *  Created on: Dec 21, 2012
  *      Author: michael.hunter
  */
-#include "simple_testing.h"
-#include "debug_new_and_delete.h"
+#include "simple_testing.hpp"
+#include "debug_new_and_delete.hpp"
 
 #include <exception>
 #include <iostream>
