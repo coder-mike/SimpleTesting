@@ -26,7 +26,6 @@ void SimpleTest::checkMemory(int line)
 	case 1: fail("Heap corrupt", line); break;
 	case 2: fail("Free header corrupt", line); break;
 	case 3: fail("Free memory modified", line); break;
-	case 4: fail("Freed memory twice", line); break;
 	}
 
 	if (isMultipleFree)

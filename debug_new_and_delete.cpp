@@ -43,8 +43,6 @@ Prefix* lastAllocated = 0;
 int checkConsistency() {
     if (isMemoryCorrputed)
         return 1;
-    if (isMultipleFree)
-        return 4;
 
 	// Look through allocated blocks
 	Prefix* block = firstAllocated;
@@ -82,7 +80,7 @@ int checkConsistency() {
 }
 
 
-void* operator new (size_t size) throw (std::bad_alloc) {
+void* myAlloc(size_t size) throw (std::bad_alloc) {
 
 	size_t space = size;// | 0x03; // Round up to nearest 4 bytes (may need to change this)
 
@@ -104,7 +102,15 @@ void* operator new (size_t size) throw (std::bad_alloc) {
     return (block + 1);
 }
 
-void operator delete (void *p_) throw() {
+void* operator new (size_t size) throw (std::bad_alloc) {
+    return myAlloc(size);
+}
+
+void* operator new[]   ( size_t size ) { 
+    return myAlloc( size ); 
+}
+
+void myFree (void *p_) throw() {
     if (p_ == 0)
         return;
 
@@ -166,4 +172,12 @@ void operator delete (void *p_) throw() {
     catch (...)
     {
     }
+}
+
+void operator delete (void *p_) throw() {
+    myFree(p_);
+}
+
+void operator delete[] (void *p_) throw() {
+    myFree(p_);
 }
