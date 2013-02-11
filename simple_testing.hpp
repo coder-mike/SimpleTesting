@@ -40,7 +40,7 @@ private:
 
 #define ASSERT(PROPOSITION) assert(PROPOSITION, "Assertion failed", __LINE__)
 #define ASSERT_EQUALS(V1, V2) assert_equals(V1, V2, #V1, __LINE__)
-#define PASS(PASS_TEXT) pass(PASS_TEXT, __LINE__)
+#define PASS(PASS_TEXT) pass(PASS_TEXT)
 #define FAIL(FAIL_TEXT) fail(FAIL_TEXT, __LINE__)
 #define TEST(TEST_NAME) \
 	namespace { \

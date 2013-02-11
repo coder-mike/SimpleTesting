@@ -45,8 +45,8 @@ int checkConsistency() {
 	Prefix* block = firstAllocated;
 	while (block)
 	{
-		std::cout << (block+1) << std::endl;
-		std::cout << block->checkValue1 << " " << block->checkValue2 << " " << block->suffix->checkValue << std::endl;
+		//std::cout << (block+1) << std::endl;
+		//std::cout << block->checkValue1 << " " << block->checkValue2 << " " << block->suffix->checkValue << std::endl;
 		if (block->checkValue1 != 0xABCD || block->checkValue2 != 0xABCD || block->suffix->checkValue != 0x9ABC)
 		{
 			isMemoryCorrputed = true;
