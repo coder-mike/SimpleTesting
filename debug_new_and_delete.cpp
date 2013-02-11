@@ -41,6 +41,11 @@ Prefix* firstAllocated = 0;
 Prefix* lastAllocated = 0;
 
 int checkConsistency() {
+    if (isMemoryCorrputed)
+        return 1;
+    if (isMultipleFree)
+        return 4;
+
 	// Look through allocated blocks
 	Prefix* block = firstAllocated;
 	while (block)
