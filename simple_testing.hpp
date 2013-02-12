@@ -24,9 +24,11 @@ protected:
 	void checkMemory(int line);
 	void assert(bool proposition, const char* msg, int line);
 	template <typename T1, typename T2>
-	void assert_equals(const T1& v1, const T2& v2, const char* msg, int line);
+	void assert_equal(const T1& v1, const T2& v2, const char* msg, int line);
 	template <typename T1>
-	void assert_equals(const T1& v1, const char* v2, const char* msg, int line);
+	void assert_equal(const T1& v1, const char* v2, const char* msg, int line);
+	template <typename T1, typename T2>
+	void assert_not_equal(const T1& v1, const T2& v2, const char* msg, int line);
 	void pass(const char* passText);
 	void fail(const char* failText, int line);
 private:
@@ -39,7 +41,8 @@ private:
 };
 
 #define ASSERT(PROPOSITION) assert(PROPOSITION, "Assertion failed", __LINE__)
-#define ASSERT_EQUALS(V1, V2) assert_equals(V1, V2, #V1, __LINE__)
+#define ASSERT_EQUAL(V1, V2) assert_equal(V1, V2, #V1, __LINE__)
+#define ASSERT_NOT_EQUAL(V1, V2) assert_not_equal(V1, V2, #V1, __LINE__)
 #define PASS(PASS_TEXT) pass(PASS_TEXT)
 #define FAIL(FAIL_TEXT) fail(FAIL_TEXT, __LINE__)
 #define TEST(TEST_NAME) \
@@ -54,7 +57,7 @@ private:
 
 
 template <typename T1, typename T2>
-void SimpleTest::assert_equals(const T1& v1, const T2& v2, const char* msg, int line)
+void SimpleTest::assert_equal(const T1& v1, const T2& v2, const char* msg, int line)
 {
 	if (v1 == v2)
 		pass(msg);
@@ -67,7 +70,7 @@ void SimpleTest::assert_equals(const T1& v1, const T2& v2, const char* msg, int 
 }
 
 template <typename T1>
-void SimpleTest::assert_equals(const T1& v1, const char* v2, const char* msg, int line)
+void SimpleTest::assert_equal(const T1& v1, const char* v2, const char* msg, int line)
 {
 	std::stringstream s;
 	s << v1;
@@ -78,6 +81,19 @@ void SimpleTest::assert_equals(const T1& v1, const char* v2, const char* msg, in
 		std::stringstream msg;
 		msg << "expected \"" << v2 << "\" but got \"" << s.str() << "\"";
 		fail(msg.str().c_str(), line);
+	}
+}
+
+template <typename T1, typename T2>
+void SimpleTest::assert_not_equal(const T1& v1, const T2& v2, const char* msg, int line)
+{
+	if (v1 != v2)
+		pass(msg);
+	else
+	{
+		std::stringstream s;
+		s << msg << " is \"" << v2 << "\"";
+		fail(s.str().c_str(), line);
 	}
 }
 

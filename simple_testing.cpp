@@ -82,7 +82,7 @@ void SimpleTest::pass(const char* passText)
 void SimpleTest::fail(const char* failText, int line)
 {
 	isFailed_ = true;
-	std::cerr << fileName_ << ":" << line << ": error: " << testName_ << " failed: " << failText << std::endl;
+	std::cout << fileName_ << ":" << line << ": error: " << testName_ << " failed: " << failText << std::endl;
 }
 
 int main()
