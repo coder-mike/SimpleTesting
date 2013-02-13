@@ -9,6 +9,8 @@
 
 #include <exception>
 #include <iostream>
+#include <time.h>
+#include <stdio.h>
 
 std::vector<SimpleTest*>* SimpleTest::allTests = 0;
 
@@ -54,6 +56,12 @@ void SimpleTest::executeTest()
 
 int SimpleTest::runAllTests()
 {
+	if (!allTests)
+	{
+		std::cout << "No Tests" << std:: endl;	
+		return 0;
+	}
+	
 	std::cout << "Running " << allTests->size() << " tests" << std:: endl;
 	for (auto test : *allTests)
 	{
@@ -85,7 +93,32 @@ void SimpleTest::fail(const char* failText, int line)
 	std::cout << fileName_ << ":" << line << ": error: " << testName_ << " failed: " << failText << std::endl;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-	return SimpleTest::runAllTests();
+	int result = SimpleTest::runAllTests();
+
+	const char* successFile = nullptr;
+	for (int i = 0; i < argc - 1; i ++)
+		if (strcmp(argv[i], "-s") == 0)
+			successFile = argv[i+1];
+
+	if (result == 0 && successFile)
+	{
+		struct tm *current;
+		time_t now;
+		time(&now);
+		current = localtime(&now);
+		FILE* fp = fopen(successFile, "w");
+		fprintf(fp, "Last successful build: %04u-%02i-%02i %02i:%02i:%02i\n", 
+			current->tm_year,
+			current->tm_mon,
+			current->tm_mday,
+			current->tm_hour, 
+			current->tm_min,
+			current->tm_sec
+			);
+		fclose(fp);
+	}
+
+	return result;
 }
