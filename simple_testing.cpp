@@ -61,7 +61,7 @@ int SimpleTest::runAllTests()
 		std::cout << "No Tests" << std:: endl;	
 		return 0;
 	}
-	
+
 	std::cout << "Running " << allTests->size() << " tests" << std:: endl;
 	for (auto test : *allTests)
 	{
@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
 		current = localtime(&now);
 		FILE* fp = fopen(successFile, "w");
 		fprintf(fp, "Last successful build: %04u-%02i-%02i %02i:%02i:%02i\n", 
-			current->tm_year,
+			current->tm_year + 1900,
 			current->tm_mon,
 			current->tm_mday,
 			current->tm_hour, 
