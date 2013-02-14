@@ -40,7 +40,7 @@ private:
 	int testStartLine_;
 };
 
-#define ASSERT(PROPOSITION) assert(PROPOSITION, "Assertion failed", __LINE__)
+#define ASSERT(PROPOSITION) assert(PROPOSITION, #PROPOSITION, __LINE__)
 #define ASSERT_EQUAL(V1, V2) assert_equal(V1, V2, #V1, __LINE__)
 #define ASSERT_NOT_EQUAL(V1, V2) assert_not_equal(V1, V2, #V1, __LINE__)
 #define PASS(PASS_TEXT) pass(PASS_TEXT)
