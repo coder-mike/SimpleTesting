@@ -13,9 +13,11 @@
 #include <stdio.h>
 
 std::vector<SimpleTest*>* SimpleTest::allTests = 0;
+std::string* SimpleTest::lastFileName_ = 0;
 
 SimpleTest::SimpleTest(const char* testName, const char* fileName, int line)
-	: isFailed_(false), testName_(testName), fileName_(fileName), testStartLine_(line)
+	: isFailed_(false), testName_(testName), fileName_(fileName), 
+	testStartLine_(line), passCount_(0), failCount_(0)
 {
 	if (!allTests)
 		allTests = new std::vector<SimpleTest*>();
@@ -38,11 +40,22 @@ void SimpleTest::executeTest()
 {
 	try
 	{
+		if (!lastFileName_ || (*lastFileName_ != fileName_))
+		{
+			if (!lastFileName_)
+				lastFileName_ = new std::string(fileName_);
+			else
+				*lastFileName_ = fileName_;
+			std::cout << "-------------- " << fileName_ << "----------------" << std::endl;
+		}
 		size_t bytesBefore = bytesAllocatedCount;
+		passCount_ = 0;
+		failCount_ = 0;
 		run();
 		checkMemory(testStartLine_);
 		if (bytesBefore != bytesAllocatedCount)
 			fail("Memory leak during test", testStartLine_);
+		std::cout << testName_ << ": " << passCount_  << "/" << (passCount_ + failCount_) << std::endl;
 	}
 	catch (std::exception& e)
 	{
@@ -84,12 +97,14 @@ void SimpleTest::assert(bool proposition, const char* msg, int line)
 
 void SimpleTest::pass(const char* passText)
 {
-	std::cout << "Passed: " << passText << std::endl;
+	passCount_ ++;
+	//std::cout << "Passed: " << passText << std::endl;
 }
 
 void SimpleTest::fail(const char* failText, int line)
 {
 	isFailed_ = true;
+	failCount_ ++;
 	std::cout << fileName_ << ":" << line << ": error: " << testName_ << " failed: " << failText << std::endl;
 }
 
@@ -113,7 +128,7 @@ int main(int argc, char *argv[])
 			current->tm_year + 1900,
 			current->tm_mon,
 			current->tm_mday,
-			current->tm_hour, 
+			current->tm_hour,
 			current->tm_min,
 			current->tm_sec
 			);

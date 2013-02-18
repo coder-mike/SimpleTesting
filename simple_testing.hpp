@@ -38,6 +38,9 @@ private:
 	std::string testName_;
 	std::string fileName_;
 	int testStartLine_;
+	int passCount_;
+	int failCount_;
+	static std::string* lastFileName_;
 };
 
 #define ASSERT(PROPOSITION) assert(PROPOSITION, #PROPOSITION, __LINE__)
