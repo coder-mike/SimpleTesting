@@ -22,7 +22,7 @@ public:
 protected:
 	virtual void run() = 0;
 	void checkMemory(int line);
-	void assert(bool proposition, const char* msg, int line);
+	void assert_(bool proposition, const char* msg, int line);
 	template <typename T1, typename T2>
 	void assert_equal(const T1& v1, const T2& v2, const char* msg, int line);
 	template <typename T1>
@@ -43,7 +43,7 @@ private:
 	static std::string* lastFileName_;
 };
 
-#define ASSERT(PROPOSITION) assert(PROPOSITION, #PROPOSITION, __LINE__)
+#define ASSERT(PROPOSITION) assert_(PROPOSITION, "Assertion failed", __LINE__)
 #define ASSERT_EQUAL(V1, V2) assert_equal(V1, V2, #V1, __LINE__)
 #define ASSERT_NOT_EQUAL(V1, V2) assert_not_equal(V1, V2, #V1, __LINE__)
 #define PASS(PASS_TEXT) pass(PASS_TEXT)

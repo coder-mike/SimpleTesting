@@ -16,7 +16,7 @@ std::vector<SimpleTest*>* SimpleTest::allTests = 0;
 std::string* SimpleTest::lastFileName_ = 0;
 
 SimpleTest::SimpleTest(const char* testName, const char* fileName, int line)
-	: isFailed_(false), testName_(testName), fileName_(fileName), 
+	: isFailed_(false), testName_(testName), fileName_(fileName),
 	testStartLine_(line), passCount_(0), failCount_(0)
 {
 	if (!allTests)
@@ -71,7 +71,7 @@ int SimpleTest::runAllTests()
 {
 	if (!allTests)
 	{
-		std::cout << "No Tests" << std:: endl;	
+		std::cout << "No Tests" << std:: endl;
 		return 0;
 	}
 
@@ -87,7 +87,7 @@ int SimpleTest::runAllTests()
 	return 0;
 }
 
-void SimpleTest::assert(bool proposition, const char* msg, int line)
+void SimpleTest::assert_(bool proposition, const char* msg, int line)
 {
 	if (proposition)
 		pass(msg);
@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
 		time(&now);
 		current = localtime(&now);
 		FILE* fp = fopen(successFile, "w");
-		fprintf(fp, "Last successful build: %04u-%02i-%02i %02i:%02i:%02i\n", 
+		fprintf(fp, "Last successful build: %04u-%02i-%02i %02i:%02i:%02i\n",
 			current->tm_year + 1900,
 			current->tm_mon,
 			current->tm_mday,

@@ -27,7 +27,7 @@ To create a new test file, create a file with the extension ".tests.cpp". By con
 The framework includes a few simple macros for testing:
 * `TEST(testName) { /*...*/ }`: Declares and registers a new test method
 * `ASSERT(proposition)` : Fails if the proposition is false
-* `ASSERT_EQUALS(value, expected)`: Fails if the value does not have the expected value.
+* `ASSERT_EQUAL(value, expected)`: Fails if the value does not have the expected value.
 * `PASS("Pass message")`: Note that a custom test passed (only needed in rare circumstances)
 * `FAIL("Fail message")`: Note that a custom test failed (only needed in rare circumstances)
 
