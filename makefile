@@ -11,10 +11,12 @@ SOURCES = \
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
+.PHONY: runtests
+
 .cpp.o:
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-test: $(TEST_EXE)
+runtests: $(TEST_EXE)
 	./$(TEST_EXE)
 
 $(TEST_EXE): ${OBJECTS}
