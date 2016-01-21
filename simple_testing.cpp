@@ -26,7 +26,7 @@ SimpleTest::SimpleTest(const char* testName, const char* fileName, int line)
 
 void SimpleTest::checkMemory(int line)
 {
-	switch (checkConsistency())	{
+	switch (checkConsistency())    {
 	case 1: fail("Heap corrupt", line); break;
 	case 2: fail("Free header corrupt", line); break;
 	case 3: fail("Free memory modified", line); break;
@@ -105,7 +105,11 @@ void SimpleTest::fail(const char* failText, int line)
 {
 	isFailed_ = true;
 	failCount_ ++;
+#if _MSC_VER
+	std::cout << fileName_ << "(" << line << "): error: " << testName_ << " failed: " << failText << std::endl;
+#else
 	std::cout << fileName_ << ":" << line << ": error: " << testName_ << " failed: " << failText << std::endl;
+#endif
 }
 
 int main(int argc, char *argv[])

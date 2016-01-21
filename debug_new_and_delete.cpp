@@ -19,16 +19,16 @@ deleted.
 */
 
 struct Suffix {
-	uint32_t checkValue; // Must be 0x9ABC for active memory, and 0x99BC for freed memory
+    uint32_t checkValue; // Must be 0x9ABC for active memory, and 0x99BC for freed memory
 };
 
 struct Prefix {
-	uint32_t checkValue1; // Must be 0xABCD for active memory, and 0xAACD for freed memory
-	Prefix* prev;
-	Prefix* next;
-	Suffix* suffix;
-	size_t len;
-	uint32_t checkValue2; // Must be 0xABCD for active memory, and 0xAACD for freed memory
+    uint32_t checkValue1; // Must be 0xABCD for active memory, and 0xAACD for freed memory
+    Prefix* prev;
+    Prefix* next;
+    Suffix* suffix;
+    size_t len;
+    uint32_t checkValue2; // Must be 0xABCD for active memory, and 0xAACD for freed memory
 };
 
 size_t bytesAllocatedCount = 0;
@@ -44,58 +44,58 @@ int checkConsistency() {
     if (isMemoryCorrputed)
         return 1;
 
-	// Look through allocated blocks
-	Prefix* block = firstAllocated;
-	while (block)
-	{
-		//std::cout << (block+1) << std::endl;
-		//std::cout << block->checkValue1 << " " << block->checkValue2 << " " << block->suffix->checkValue << std::endl;
-		if (block->checkValue1 != 0xABCD || block->checkValue2 != 0xABCD || block->suffix->checkValue != 0x9ABC)
-		{
-			isMemoryCorrputed = true;
-			return 1;
-		}
-		block = block->next;
-	}
+    // Look through allocated blocks
+    Prefix* block = firstAllocated;
+    while (block)
+    {
+        //std::cout << (block+1) << std::endl;
+        //std::cout << block->checkValue1 << " " << block->checkValue2 << " " << block->suffix->checkValue << std::endl;
+        if (block->checkValue1 != 0xABCD || block->checkValue2 != 0xABCD || block->suffix->checkValue != 0x9ABC)
+        {
+            isMemoryCorrputed = true;
+            return 1;
+        }
+        block = block->next;
+    }
 
-	block = firstDeallocated;
-	while (block)
-	{
-		if (block->checkValue1 != 0xAACD || block->checkValue2 != 0xAACD || block->suffix->checkValue != 0x99BC)
-		{
-			isMemoryCorrputed = true;
-			return 2;
-		}
-		uint32_t* p = (uint32_t*)(block + 1);
-		size_t count = block->len/sizeof(uint32_t*);
-		while (count--)
-		{
-			if (*(p++) != 0xFEEEFEEE)
-				return 3;
-		}
-		block = block->next;
-	}
+    block = firstDeallocated;
+    while (block)
+    {
+        if (block->checkValue1 != 0xAACD || block->checkValue2 != 0xAACD || block->suffix->checkValue != 0x99BC)
+        {
+            isMemoryCorrputed = true;
+            return 2;
+        }
+        uint32_t* p = (uint32_t*)(block + 1);
+        size_t count = block->len/sizeof(uint32_t*);
+        while (count--)
+        {
+            if (*(p++) != 0xFEEEFEEE)
+                return 3;
+        }
+        block = block->next;
+    }
 
-	return 0;
+    return 0;
 }
 
 
 void* myAlloc(size_t size) throw (std::bad_alloc) {
 
-	size_t space = size;// | 0x03; // Round up to nearest 4 bytes (may need to change this)
+    size_t space = size;// | 0x03; // Round up to nearest 4 bytes (may need to change this)
 
-	Prefix* block = (Prefix*)malloc(sizeof(Prefix) + space + sizeof(Suffix));
-	block->checkValue1 = 0xABCD;
-	block->checkValue2 = 0xABCD;
-	block->len = size;
-	block->suffix = (Suffix*)((uint8_t*)block + sizeof(Prefix) + space);
-	block->suffix->checkValue = 0x9ABC;
+    Prefix* block = (Prefix*)malloc(sizeof(Prefix) + space + sizeof(Suffix));
+    block->checkValue1 = 0xABCD;
+    block->checkValue2 = 0xABCD;
+    block->len = size;
+    block->suffix = (Suffix*)((uint8_t*)block + sizeof(Prefix) + space);
+    block->suffix->checkValue = 0x9ABC;
 
-	block->next = 0;
-	block->prev = lastAllocated;
-	if (!lastAllocated)
-		firstAllocated = block;
-	lastAllocated = block;
+    block->next = 0;
+    block->prev = lastAllocated;
+    if (!lastAllocated)
+        firstAllocated = block;
+    lastAllocated = block;
 
     bytesAllocatedCount += size;
 
@@ -106,8 +106,8 @@ void* operator new (size_t size) throw (std::bad_alloc) {
     return myAlloc(size);
 }
 
-void* operator new[]   ( size_t size ) { 
-    return myAlloc( size ); 
+void* operator new[]   ( size_t size ) {
+    return myAlloc( size );
 }
 
 void myFree (void *p_) throw() {
@@ -144,9 +144,9 @@ void myFree (void *p_) throw() {
             if (block->prev)
                 block->prev->next = block->next;
             if (firstAllocated == block)
-            	firstAllocated = block->next;
+                firstAllocated = block->next;
             if (lastAllocated == block)
-            	lastAllocated = block->prev;
+                lastAllocated = block->prev;
             block->prev = 0;
             block->next = 0;
 
@@ -154,15 +154,15 @@ void myFree (void *p_) throw() {
             if (block->len > 256)
                 free(block);
             else {
-            	// Smaller blocks we keep around to make sure they don't get used after they're freed
-            	size_t count = block->len / sizeof(uint32_t);
-            	uint32_t* data = (uint32_t*)p_;
+                // Smaller blocks we keep around to make sure they don't get used after they're freed
+                size_t count = block->len / sizeof(uint32_t);
+                uint32_t* data = (uint32_t*)p_;
                 for (uint32_t b = 0; b < count; b ++) {
                     data[b] = 0xFEEEFEEE;
                 }
 
                 if (firstDeallocated == 0)
-                	firstDeallocated = block;
+                    firstDeallocated = block;
                 block->prev = lastDeallocated;
                 block->next = 0;
                 lastDeallocated = block;
@@ -174,10 +174,10 @@ void myFree (void *p_) throw() {
     }
 }
 
-void operator delete (void *p_) throw() {
-    myFree(p_);
-}
-
-void operator delete[] (void *p_) throw() {
-    myFree(p_);
-}
+// http://en.cppreference.com/w/cpp/memory/new/operator_delete
+void operator delete (void *p_) throw() { myFree(p_); }
+void operator delete (void* p_, const std::nothrow_t& tag) { myFree(p_); }
+void operator delete (void* p_, std::size_t sz) { myFree(p_); }
+void operator delete[] (void *p_) throw() { myFree(p_); }
+void operator delete[] (void* p_, const std::nothrow_t& tag) { myFree(p_); }
+void operator delete[] (void* p_, std::size_t sz) { myFree(p_); }
