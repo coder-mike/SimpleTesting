@@ -55,3 +55,9 @@ The test file should `#include` the `simple_testing.h` header. It can contain an
     {
     	// ...
     }
+
+## Visual C++ Integration
+
+To run the unit test output each time after they are built, do the followin.
+
+In the project settings in VC++, look for "Build Events", and modify the "Post-Build Event" so that the command line is `$(TargetPath)`.
