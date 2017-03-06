@@ -83,7 +83,7 @@ int SimpleTest::runAllTests()
 		if (test->isFailed_)
 			return 1;
 	}
-	std::cout << "All tests passed" << std::endl;
+	std::cout << "All " << allTests->size() << " tests passed" << std::endl;
 	return 0;
 }
 
